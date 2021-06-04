@@ -3,66 +3,44 @@ import React from 'react';
 import './index.css';
 // import ShoppingList from './ShoppingList';
 
-const FormComponent = ({formHandler,checkboxHandler, isConfirmed})=> {
-  return(
-    <form onSubmit={formHandler}> 
-      <input type="checkbox" id="age" onChange={checkboxHandler} checked={isConfirmed}/>
-      <label htmlFor="age"/>
-      <br />
-      <button>Kup bilet</button>
-    </form>
-  )
-}
-
-const ValidationMessage = (props)=> {
-  const {txt} = props
-  return <p>{txt}</p>
-}
-
 class App extends React.Component {
 
   state = {
-    isConfirmed: false,
-    isFormSubmitted: false
+    availableProducts: 7, 
+    shoppingCart: 7,
   }
 
-  handleChange = () => {
+  handleRemove = () => {
+      this.setState({
+          shoppingCart: this.state.shoppingCart-1
+      })
+  }
+
+  handleAdd  = ()=> {
     this.setState({
-      isConfirmed: !this.state.isConfirmed, 
-      isFormSubmitted: false,
+      shoppingCart: this.state.shoppingCart+1
     })
   }
 
-  displayMessage = ()=>{
-    if(this.state.isFormSubmitted) {
-      if(this.state.isConfirmed) {
-        return <ValidationMessage txt={"UMożesz obejrzec filmu"}/>
-      } else {
-        return <ValidationMessage txt={"Nie możesz obejrzec film"}/>
-      }
-      // console.log(this.state.isConfirmed)
-    }  
-  }
-
-  handleFormSubmit = (e) => {
-    e.preventDefault()
-    if (!this.state.isFormSubmitted) {
+  handleBuy = ()=> {
       this.setState({
-        isFormSubmitted: true,
-      })
-    }
+        availableProducts: this.state.availableProducts - this.state.shoppingCart,
+        shoppingCart: 0,
+      }, console.log(this.state.availableProducts, this.state.shoppingCart))
   }
 
   render(){
-    console.log(this.state.isConfirmed)
-    const {isConfirmed} = this.state
-    console.log(isConfirmed)
-
     return (
       <>
-        <h1>Kup bilet na horror roku!</h1>
-        <FormComponent formHandler={this.handleFormSubmit} checkboxHandler={this.handleChange} isConfirmed={this.state.isConfirmed}/>
-        {this.displayMessage()}
+        <button disabled={this.state.shoppingCart == 0 ? true : false} onClick={this.handleRemove}>-</button>
+          <span style={
+              {color: this.state.availableProducts==0 ? "grey" : "black"}
+          }>
+          {this.state.shoppingCart}</span>
+        <button disabled={this.state.shoppingCart >= this.state.availableProducts ? true : false}onClick={this.handleAdd}>+</button>
+         {this.state.availableProducts > 0 && 
+           <button onClick={this.handleBuy}>Kup</button>
+         } 
       </>
     )
   }
