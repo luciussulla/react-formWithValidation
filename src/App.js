@@ -3,44 +3,53 @@ import React from 'react';
 import './index.css';
 // import ShoppingList from './ShoppingList';
 
+const Item = ({name, age, sthg})=> (
+  <div>
+    <h1>{name}</h1>
+    <h2>{age}</h2>
+  </div>
+)
+
 class App extends React.Component {
-
   state = {
-    availableProducts: 7, 
-    shoppingCart: 7,
+    items: ["jablko", "sliwka", "gruszka"], 
+    users: [
+      {name: 'jil', age: 26, sex: 'male'},
+      {name: 'bo', age: 20, sex: 'female'},
+      {name: 'karol', age: 21, sex: 'female'},
+      {name: 'mili', age: 19, sex: 'male'},
+    ], 
+    which: ''
+  }
+  
+  setWhich = (which) => { 
+      which === "male" ? this.setState({which: "male"}) : this.setState({which: "female"})
   }
 
-  handleRemove = () => {
-      this.setState({
-          shoppingCart: this.state.shoppingCart-1
-      })
+  filteredUsers = (which)=> {
+    switch (which) {
+      case "male":
+        return this.state.users.filter(item=> item.sex=="male")
+        break;
+      case "female":
+        return this.state.users.filter(item=> item.sex=="female")
+        break;
+      default: 
+        console.log("invalid option")
+        return []  
+    }
   }
 
-  handleAdd  = ()=> {
-    this.setState({
-      shoppingCart: this.state.shoppingCart+1
-    })
-  }
-
-  handleBuy = ()=> {
-      this.setState({
-        availableProducts: this.state.availableProducts - this.state.shoppingCart,
-        shoppingCart: 0,
-      }, console.log(this.state.availableProducts, this.state.shoppingCart))
-  }
-
-  render(){
+  render () {
     return (
       <>
-        <button disabled={this.state.shoppingCart == 0 ? true : false} onClick={this.handleRemove}>-</button>
-          <span style={
-              {color: this.state.availableProducts==0 ? "grey" : "black"}
-          }>
-          {this.state.shoppingCart}</span>
-        <button disabled={this.state.shoppingCart >= this.state.availableProducts ? true : false}onClick={this.handleAdd}>+</button>
-         {this.state.availableProducts > 0 && 
-           <button onClick={this.handleBuy}>Kup</button>
-         } 
+      <ul>
+          {
+            this.filteredUsers(this.state.which).map(item=> <Item key={item.name} name={item.name} age={item.age}/> )
+          }
+      </ul>
+      <button onClick={()=>this.setWhich('male')}>Men</button>
+      <button onClick={()=>this.setWhich('female')}>Fem</button>
       </>
     )
   }
