@@ -1,71 +1,35 @@
 import './App.css';
 import React from 'react';
 import './index.css';
-import Header from './Header.js'
-import ListItems from './ListItems.js'
 
 class App extends React.Component {
   state = {
-    items: [
-      {id: 1, txt: "herbata", price: 20,  active: false},
-      {id: 2, txt: "obiad",   price: 50,  active: false},
-      {id: 3, txt: "kolacja", price: 100, active: false}, 
-      {id: 4, txt: "woda",    price: 10,  active: false}
-    ], 
-    totalAmount: 0,
+    city: "Londyn", 
+    text: "my city is nice"
   }
 
-  handleStatusChange = (id) => {
-      const itemsFiltered = this.state.items.map(item => {
-        if(item.id===id) {
-          item.active = !item.active
-        }
-        return item
-      })  
-      this.setState({
-        items: [...itemsFiltered]
-      })
-      console.log('make active clicked')
-      const price = this.state.items.reduce((total, item) => {
-        if(item.active) {
-          return total + item.price
-        } else { 
-          return total
-        }
-     },0)
-     console.log(price)
-     const items = this.state.items
-     this.setState({
-       items,
-       totalAmount: price
-     })
-  }   
-
-  doZaplaty = ()=> <p>{this.state.totalAmount}</p>
-  
-
-  // countActivePrice = ()=> {
-  //   const price = this.state.items.reduce((total, item) => {
-  //      if(item.active) {
-  //        return total + item.price
-  //      } else { 
-  //        return total
-  //      }
-  //   },0)
-  //   console.log(price)
-  //   const items = this.state.items
-  //   this.setState({
-  //     items,
-  //     totalAmount: price
-  //   })
-  // }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
   render () {
     return (
       <>
-        <Header items={this.state.items}/>
-        <ListItems allItems={this.state.items} changeStatus={this.handleStatusChange} />
-        {this.doZaplaty()}
+        <form>
+          <label>
+            Podaj miasto:
+            <input value={this.state.city} onChange={this.handleChange} type="text" name="city"/>
+          </label>
+          <br/>
+          <label> 
+            Napisz cos o miescie
+            <textarea onChange={this.handleChange} value={this.state.text} name="text" cols="30" rows="10"></textarea>
+          </label>
+          <br />
+          <button> Zapisz się</button>
+        </form>
       </>
     )
   }
