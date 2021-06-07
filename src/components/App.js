@@ -1,42 +1,39 @@
 import './App.css';
 import React from 'react';
 import '../index.css';
-import SwitchButton from './SwitchButton'
+import Word from './Word'
 
 class App extends React.Component {
+
   state = {
-    time: 0, 
-    active: false,
+      isLoaded: false,
+      words: []
   }
 
-  addSecond = () => {
-    console.log("Add second called")
-    this.setState({
-      time: this.state.time + 1
+  fetchData = ()=> {
+    fetch('data/words.json')
+    .then(res => res.json())
+    .then(data => {
+      this.setState({
+        words: data.words, 
+        isLoaded: true,
+      })
     })
   }
 
-  handleClick = ()=> {
-    console.log("click is being handled")
-    if(this.state.active) {
-      clearInterval(this.intervalIndex)
-    } else {
-      this.intervalIndex = setInterval(()=> {
-        this.addSecond()
-      },1000)
-    }
-
-    this.setState({
-      active: !this.state.active
-    })
+  componentDidMount = ()=> {
+    setTimeout(this.fetchData, 1000)
   }
 
-  render () {
-    console.log("rendienrg")
+  render () {    
+    const words = this.state.words.map(word=>(
+      <Word key={word.id} english={word.en} polish={word.pl}/>
+    ))
     return (
       <> 
-        <p>{this.state.time}</p> 
-        <SwitchButton handleClick={this.handleClick}/>
+        <ul>
+          {this.state.isLoaded ? words : <p>This is only a spinner</p>}
+        </ul>
       </>
     )
   }
