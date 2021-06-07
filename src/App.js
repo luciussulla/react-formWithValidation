@@ -4,32 +4,36 @@ import './index.css';
 
 class App extends React.Component {
   state = {
-    city: "Londyn", 
-    text: "my city is nice"
+    time: this.getTime()
   }
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
+  getTime(){
+    const currentTime = new Date()
+    console.log(currentTime)
+    return({
+      hours: currentTime.getHours(), 
+      minutes: currentTime.getMinutes(),
+      seconds: currentTime.getSeconds()
     })
   }
 
+  setTime() {
+    const time = this.getTime()
+    this.setState({time})
+  }
+  
+  componentDidMount() {
+    setInterval(this.setTime.bind(this),1000)
+  }
+
   render () {
+    const {hours, minutes, seconds} = this.state.time
+    
     return (
-      <>
-        <form>
-          <label>
-            Podaj miasto:
-            <input value={this.state.city} onChange={this.handleChange} type="text" name="city"/>
-          </label>
-          <br/>
-          <label> 
-            Napisz cos o miescie
-            <textarea onChange={this.handleChange} value={this.state.text} name="text" cols="30" rows="10"></textarea>
-          </label>
-          <br />
-          <button> Zapisz się</button>
-        </form>
+      <>  
+      <div>
+        {minutes}:{hours}:{seconds}
+      </div>
       </>
     )
   }
