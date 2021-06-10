@@ -2,3 +2,30 @@
   text-align: center;
 }
 
+form {
+  margin: 20px; 
+}
+
+label {
+  display: block; 
+}
+
+input {
+  margin-left: 20px; 
+  margin-top: 20px; 
+}
+
+input[type="checkbox"] {
+  margin-left: 0; 
+  margin-right: 10px; 
+}
+
+button {
+  display: block; 
+}
+
+span {
+  margin-left: 10px; 
+  color: red;
+  font-size: 10px; 
+}
